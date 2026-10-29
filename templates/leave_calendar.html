@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký Lịch Nghỉ Phép - WORKFLOW</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* MAIN CONTENT */
+        .main-wrapper {
+            margin-left: 270px;
+            padding: 24px 36px 48px;
+            min-height: 100vh;
+        }
+
+        .breadcrumb-tag {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #64748b;
+            letter-spacing: 0.8px;
+            margin-bottom: 20px;
+        }
+
+        /* CALENDAR CARD */
+        .calendar-main-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 26px 28px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            margin-bottom: 24px;
+        }
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .calendar-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .calendar-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn-group {
+            display: inline-flex;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .cal-nav-btn {
+            border: none;
+            background: #ffffff;
+            color: #64748b;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+
+        .cal-nav-btn:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .month-display-text {
+            padding: 6px 16px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #1e293b;
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            user-select: none;
+        }
+
+        .btn-chart-stats {
+            background: #eff6ff;
+            color: #3b82f6;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 7px 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.15s ease;
+        }
+
+        .btn-chart-stats:hover {
+            background: #3b82f6;
+            color: #ffffff;
+        }
+
+        /* GRID STYLES */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .weekday-header {
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #64748b;
+            padding: 6px 0;
+            user-select: none;
+        }
+
+        .weekday-header.sunday {
+            color: #ef4444;
+        }
+
+        .day-cell {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            min-height: 105px;
+            padding: 8px 10px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.18s ease;
+            position: relative;
+        }
+
+        .day-cell:hover {
+            border-color: #94a3b8;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .day-cell.other-month {
+            background: #f8fafc;
+            border-color: #f1f5f9;
+            cursor: default;
+            opacity: 0.45;
+        }
+
+        .day-cell.selected {
+            border-color: #3b82f6 !important;
+            background-color: #eff6ff !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4) !important;
+        }
+
+        .day-num {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 4px;
+        }
+
+        .day-num.today {
+            color: #ef4444;
+            font-weight: 800;
+        }
+
+        .day-num.sunday {
+            color: #64748b;
+        }
+
+        .leave-tags-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow-y: auto;
+            max-height: 70px;
+        }
+
+        .leave-tag {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 3px 6px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+        }
+
+        .leave-tag.my-leave {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        /* LEGEND */
+        .calendar-legend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            padding-top: 14px;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .legend-dot-green {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background-color: #10b981;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .legend-dot-blue {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        /* CONFIRMATION SECTION */
+        .confirm-section {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px 28px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .confirm-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+
+        .confirm-subtitle {
+            font-size: 0.82rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .confirm-textarea {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.15s ease;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .confirm-textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .btn-register-leave {
+            background-color: #4f46e5;
+            color: #ffffff;
+            border: none;
+            border-radius: 9px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            padding: 11px 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-register-leave:hover {
+            background-color: #4338ca;
+        }
+
+        .btn-register-leave:disabled {
+            background-color: #94a3b8;
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* MODAL STYLES */
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 20px 24px;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    {% if session.get('role') == 'admin' or current_user.role == 'admin' %}
+        {% include 'sidebar_admin.html' %}
+    {% else %}
+        {% include 'sidebar_user.html' %}
+    {% endif %}
+
+    <!-- MAIN WRAPPER -->
+    <main class="main-wrapper">
+        <!-- BREADCRUMB -->
+        <div class="breadcrumb-tag">/ ĐĂNG KÝ LỊCH NGHỈ PHÉP</div>
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm mb-4" role="alert">
+                    <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- CALENDAR MAIN CARD -->
+        <div class="calendar-main-card">
+            <!-- HEADER -->
+            <div class="calendar-header">
+                <h1 class="calendar-title">Đăng ký lịch nghỉ phép <span class="badge bg-primary-subtle text-primary border border-primary-subtle ms-2" style="font-size: 0.82rem; font-weight: 700; vertical-align: middle;">Phòng {{ selected_dept }}</span></h1>
+                <div class="calendar-controls">
+                    <div class="nav-btn-group">
+                        <a href="{{ url_for('leave_calendar', month=prev_month, year=prev_year, dept=selected_dept) }}" class="cal-nav-btn" title="Tháng trước">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                        <div class="month-display-text">Tháng {{ current_month }} / {{ current_year }}</div>
+                        <a href="{{ url_for('leave_calendar', month=next_month, year=next_year, dept=selected_dept) }}" class="cal-nav-btn" title="Tháng sau">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </div>
+                    <button type="button" class="btn-chart-stats" data-bs-toggle="modal" data-bs-target="#leaveStatsModal" title="Xem biểu đồ thống kê ngày nghỉ">
+                        <i class="bi bi-bar-chart-line-fill"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CALENDAR GRID -->
+            <div class="calendar-grid">
+                <!-- WEEKDAYS -->
+                <div class="weekday-header">T2</div>
+                <div class="weekday-header">T3</div>
+                <div class="weekday-header">T4</div>
+                <div class="weekday-header">T5</div>
+                <div class="weekday-header">T6</div>
+                <div class="weekday-header">T7</div>
+                <div class="weekday-header sunday">CN</div>
+
+                <!-- DAYS ITERATION -->
+                {% for week in calendar_weeks %}
+                    {% for day_item in week %}
+                    <div class="day-cell {% if not day_item.is_current_month %}other-month{% endif %}"
+                         {% if day_item.is_current_month %}
+                         data-date="{{ day_item.date_str }}"
+                         onclick="toggleDateSelection(this, '{{ day_item.date_str }}')"
+                         {% endif %}>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% if day_item.is_current_month %}
+                            <span class="day-num {% if day_item.is_today %}today{% elif day_item.is_sunday %}sunday{% endif %}">
+                                {{ day_item.day }}
+                            </span>
+                            {% else %}
+                            <span></span>
+                            {% endif %}
+                        </div>
+
+                        <!-- LEAVE TAGS IN THIS CELL -->
+                        <div class="leave-tags-container">
+                            {% if day_item.is_current_month and day_item.leaves %}
+                                {% for leave in day_item.leaves %}
+                                <div class="leave-tag {% if leave.employee_code == session.get('employee_code') %}my-leave{% endif %}"
+                                     title="Nhân viên: {{ leave.employee.full_name if leave.employee else leave.employee_code }}&#013;Lý do: {{ leave.reason or 'Không có' }}">
+                                    <span>{{ leave.employee.full_name if leave.employee else leave.employee_code }}</span>
+                                    {% if leave.employee_code == session.get('employee_code') or session.get('role') == 'admin' %}
+                                    <form action="{{ url_for('leave_cancel', id=leave.id) }}" method="POST" class="d-inline" onsubmit="event.stopPropagation(); return confirm('Bạn có muốn hủy lịch nghỉ ngày này?');">
+                                        <button type="submit" class="border-0 bg-transparent p-0 text-danger" style="font-size: 0.65rem;" title="Hủy">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
+            <!-- LEGEND -->
+            <div class="calendar-legend">
+                <div>
+                    <span class="legend-dot-green"></span>
+                    <span>Đã đăng ký</span>
+                </div>
+                <div>
+                    <span class="legend-dot-blue"></span>
+                    <span>Đang chọn</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONFIRMATION / REGISTRATION SECTION -->
+        <div class="confirm-section">
+            <h2 class="confirm-title">Xác nhận đăng ký</h2>
+            <div class="confirm-subtitle" id="selectedDatesLabel">
+                Chọn các ngày trên lịch để đăng ký
+            </div>
+
+            <form action="{{ url_for('leave_register') }}" method="POST" id="leaveForm">
+                <input type="hidden" name="leave_dates" id="leaveDatesInput">
+                <input type="hidden" name="redirect_month" value="{{ current_month }}">
+                <input type="hidden" name="redirect_year" value="{{ current_year }}">
+                <input type="hidden" name="redirect_dept" value="{{ selected_dept }}">
+
+                <div class="mb-3">
+                    <textarea name="reason" class="confirm-textarea" placeholder="Ghi chú lý do nghỉ (bắt buộc)..." required></textarea>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn-register-leave" id="btnSubmitLeave" disabled>
+                        <i class="bi bi-calendar-check"></i>
+                        <span>Đăng ký nghỉ</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- STATS MODAL: BIỂU ĐỒ THỐNG KÊ NGÀY NGHỈ PHÉP TRONG THÁNG -->
+    <div class="modal fade" id="leaveStatsModal" tabindex="-1" aria-labelledby="leaveStatsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="leaveStatsModalLabel">
+                        <i class="bi bi-bar-chart-fill me-2 text-primary"></i>Thống Kê Ngày Nghỉ Phép - Tháng {{ current_month }} / {{ current_year }} (Phòng {{ selected_dept }})
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="height: 280px;" class="mb-4">
+                        <canvas id="leaveBarChart"></canvas>
+                    </div>
+
+                    <h6 class="fw-bold text-dark mb-2">Chi tiết nhân sự nghỉ phép trong tháng:</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered align-middle">
+                            <thead class="table-light">
+                                <tr style="font-size: 0.8rem;">
+                                    <th>STT</th>
+                                    <th>Nhân viên</th>
+                                    <th>Phòng ban</th>
+                                    <th>Tổng số ngày nghỉ</th>
+                                    <th>Các ngày nghỉ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if emp_summary %}
+                                    {% for item in emp_summary %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td class="fw-bold">{{ item.name }}</td>
+                                        <td><span class="badge bg-info-subtle text-info">{{ item.dept }}</span></td>
+                                        <td class="fw-bold text-primary">{{ item.count }} ngày</td>
+                                        <td class="small text-muted">{{ item.dates_str }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-3">Chưa có nhân viên nào đăng ký nghỉ trong tháng này.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // XỬ LÝ CHỌN NGÀY TRÊN LỊCH
+        const selectedDates = new Set();
+        const datesInput = document.getElementById('leaveDatesInput');
+        const datesLabel = document.getElementById('selectedDatesLabel');
+        const submitBtn = document.getElementById('btnSubmitLeave');
+
+        function toggleDateSelection(cell, dateStr) {
+            if (selectedDates.has(dateStr)) {
+                selectedDates.delete(dateStr);
+                cell.classList.remove('selected');
+            } else {
+                selectedDates.add(dateStr);
+                cell.classList.add('selected');
+            }
+
+            // Cập nhật giá trị vào form
+            const datesArray = Array.from(selectedDates).sort();
+            datesInput.value = datesArray.join(',');
+
+            // Cập nhật text hiển thị
+            if (datesArray.length === 0) {
+                datesLabel.innerText = 'Chọn các ngày trên lịch để đăng ký';
+                datesLabel.classList.remove('text-primary', 'fw-bold');
+                submitBtn.disabled = true;
+            } else {
+                // Định dạng hiển thị DD/MM/YYYY
+                const formatted = datesArray.map(d => {
+                    const parts = d.split('-');
+                    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }).join(', ');
+                datesLabel.innerText = `Đã chọn ${datesArray.length} ngày: ${formatted}`;
+                datesLabel.classList.add('text-primary', 'fw-bold');
+                submitBtn.disabled = false;
+            }
+        }
+
+        // VẼ BIỂU ĐỒ TRONG MODAL THỐNG KÊ
+        const chartLabels = {{ chart_labels|tojson }};
+        const chartData = {{ chart_data|tojson }};
+
+        const ctx = document.getElementById('leaveBarChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartLabels.length ? chartLabels : ['Chưa có dữ liệu'],
+                datasets: [{
+                    label: 'Số ngày nghỉ trong tháng',
+                    data: chartData.length ? chartData : [0],
+                    backgroundColor: '#4f46e5',
+                    borderRadius: 6,
+                    barPercentage: 0.5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            callback: function(val) { return val + ' ngày'; }
+                        },
+                        grid: { borderDash: [4, 4], color: '#f1f5f9' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

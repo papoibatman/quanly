@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Workflow Báo Cáo Công Việc Hằng Ngày</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #1e1b4b;
+            background: radial-gradient(circle at center, #2e2a72 0%, #0f0c29 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 900px;
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            display: flex;
+            min-height: 480px;
+        }
+
+        /* Banner bên trái */
+        .login-banner {
+            flex: 1;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #4c1d95 100%);
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-banner::before {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            top: -50px;
+            left: -50px;
+        }
+
+        .logo-box {
+            background: #ffffff;
+            padding: 12px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            z-index: 1;
+        }
+
+        .logo-fallback {
+            font-weight: 800;
+            font-size: 20px;
+            color: #1e1b4b;
+            letter-spacing: 1px;
+        }
+
+        .banner-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            z-index: 1;
+        }
+
+        .banner-subtitle {
+            font-size: 14px;
+            opacity: 0.85;
+            z-index: 1;
+            font-weight: 300;
+        }
+
+        /* Form bên phải */
+        .login-form-area {
+            flex: 1.1;
+            padding: 45px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #ffffff;
+        }
+
+        .form-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .form-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .field-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .input-group-custom {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group-custom i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 15px;
+        }
+
+        .input-group-custom input {
+            width: 100%;
+            padding: 12px 14px 12px 40px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1f2937;
+            transition: all 0.2s ease;
+        }
+
+        .input-group-custom input:focus {
+            outline: none;
+            border-color: #6366f1;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .forgot-link {
+            font-size: 12px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: #6366f1;
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background: #4f46e5;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+        }
+
+        .alert {
+            font-size: 13px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* --- CSS CHO MODAL QUÊN MẬT KHẨU --- */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .custom-modal {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            position: relative;
+            animation: modalShow 0.25s ease-out;
+        }
+
+        @keyframes modalShow {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f3f4f6;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4b5563;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .modal-title-custom {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+
+        .modal-subtitle-custom {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        .modal-footer-custom {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .btn-modal-close {
+            flex: 1;
+            padding: 11px;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-modal-close:hover {
+            background: #f9fafb;
+        }
+
+        .btn-modal-search {
+            flex: 1;
+            padding: 11px;
+            background: #6366f1;
+            border: none;
+            border-radius: 10px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-modal-search:hover {
+            background: #4f46e5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <!-- Banner Bên Trái -->
+        <div class="login-banner">
+            <div class="logo-box">
+                <span class="logo-fallback">Nissei</span>
+            </div>
+            <div class="banner-title">Workflow</div>
+            <div class="banner-subtitle">Báo Cáo Công Việc Hằng Ngày</div>
+        </div>
+
+        <!-- Form Đăng Nhập Bên Phải -->
+        <div class="login-form-area">
+            <div class="form-title">Đăng nhập</div>
+            <div class="form-subtitle">Chào mừng bạn trở lại!</div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="field-label">MÃ NHÂN VIÊN</label>
+                    <div class="input-group-custom">
+                        <i class="fa-regular fa-id-card"></i>
+                        <input type="text" name="employee_code" placeholder="VD: NTV-XXXX hoặc ADMIN01" required autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label class="field-label mb-0">MẬT KHẨU</label>
+                        <a class="forgot-link" id="openForgotModal">Quên mật khẩu?</a>
+                    </div>
+                    <div class="input-group-custom mt-1">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" name="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    Đăng nhập hệ thống <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL TÌM LẠI MẬT KHẨU -->
+    <div class="custom-modal-overlay" id="forgotModalOverlay">
+        <div class="custom-modal">
+            <!-- Nút đóng X góc phải -->
+            <button type="button" class="modal-close-btn" id="closeModalBtnX">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-title-custom">Tìm lại mật khẩu</div>
+            <div class="modal-subtitle-custom">Nhập email để tìm lại mật khẩu</div>
+
+            <form action="/forgot-password" method="POST">
+                <div class="mb-3">
+                    <label class="field-label">EMAIL</label>
+                    <div class="input-group-custom mb-0">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" name="email" placeholder="your.email@example.com" required autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="modal-footer-custom">
+                    <button type="button" class="btn-modal-close" id="closeModalBtn">Đóng</button>
+                    <button type="submit" class="btn-modal-search">
+                        Tìm kiếm <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript điều khiển ẩn/hiện Modal -->
+    <script>
+        const modalOverlay = document.getElementById('forgotModalOverlay');
+        const openBtn = document.getElementById('openForgotModal');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const closeBtnX = document.getElementById('closeModalBtnX');
+
+        // Mở modal khi bấm "Quên mật khẩu?"
+        openBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'flex';
+        });
+
+        // Đóng modal khi bấm nút "Đóng"
+        closeBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+        });
+
+        // Đóng modal khi bấm dấu "X"
+        closeBtnX.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+        });
+
+        // Đóng modal khi bấm vùng nền tối bên ngoài
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

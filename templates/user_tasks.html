@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công việc của tôi - WORKFLOW</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* MAIN CONTENT AREA */
+        .main-wrapper {
+            margin-left: 270px;
+            padding: 24px 36px;
+            min-height: 100vh;
+        }
+
+        .breadcrumb-tag {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.8px;
+            margin-bottom: 16px;
+        }
+
+        .top-action-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .page-title {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        /* MINI STATS CARDS */
+        .stats-and-buttons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card-mini {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 7px 16px;
+            min-width: 110px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .stat-total { color: #0f172a; }
+        .stat-progress { color: #2563eb; }
+        .stat-completed { color: #16a34a; }
+        .stat-stuck { color: #f59e0b; }
+
+        /* ACTION BUTTONS */
+        .btn-create-project {
+            background-color: #0b1329;
+            color: #ffffff;
+            border: none;
+            border-radius: 9px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            padding: 10px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 6px rgba(11, 19, 41, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .btn-create-project:hover {
+            background-color: #1e293b;
+            color: #ffffff;
+        }
+
+        .btn-report-work {
+            background-color: #10b981;
+            color: #ffffff;
+            border: none;
+            border-radius: 9px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            padding: 10px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-report-work:hover {
+            background-color: #059669;
+            color: #ffffff;
+        }
+
+        /* DATA CARDS */
+        .content-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            margin-bottom: 24px;
+        }
+
+        .badge-status-progress {
+            background-color: #e0f2fe;
+            color: #0284c7;
+            border: 1px solid #bae6fd;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-status-completed {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-status-stuck {
+            background-color: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fde68a;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+
+        /* EDIT REPORT WORK TYPE ITEMS */
+        .edit-work-type-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: all 0.15s ease;
+            margin-bottom: 0;
+            user-select: none;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+        .edit-work-type-item:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+        .edit-work-type-item.checked,
+        .edit-work-type-item:has(input:checked) {
+            border: 1.5px solid #6366f1 !important;
+            background-color: #f5f3ff !important;
+            color: #4338ca !important;
+        }
+        .edit-work-type-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+
+
+        /* MODAL STYLING */
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 20px 24px;
+        }
+
+        .modal-title {
+            font-weight: 800;
+            color: #0f172a;
+            font-size: 1.15rem;
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #f1f5f9;
+            padding: 16px 24px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            padding: 9px 13px;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .work-type-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+            border: 1px solid #e2e8f0;
+        }
+
+        .work-type-pill:hover {
+            background: #e2e8f0;
+        }
+
+        .work-type-pill input[type="checkbox"] {
+            accent-color: #10b981;
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    {% if session.get('role') == 'admin' or user.role == 'admin' %}
+        {% include 'sidebar_admin.html' %}
+    {% else %}
+        {% include 'sidebar_user.html' %}
+    {% endif %}
+
+    <!-- MAIN WRAPPER -->
+    <main class="main-wrapper">
+        <!-- BREADCRUMB -->
+        <div class="breadcrumb-tag">/ CÔNG VIỆC CỦA TÔI / PHÒNG {{ user.department }}</div>
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm mb-4" role="alert">
+                    <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- TOP BAR: TITLE, STATS & BUTTONS -->
+        <div class="top-action-bar">
+            <div>
+                <h1 class="page-title">Công việc của tôi</h1>
+                <div class="text-muted small mt-1">
+                    Nhân viên: <strong>{{ user.full_name }}</strong> ({{ user.employee_code }}) — Phòng ban: <span class="badge bg-primary">{{ user.department }}</span>
+                </div>
+            </div>
+
+            <div class="stats-and-buttons">
+                <!-- 4 STAT BOXES (ĐỘNG TỪ DB) -->
+                <div class="stat-card-mini">
+                    <div class="stat-label">TỔNG CÔNG VIỆC</div>
+                    <div class="stat-value stat-total">{{ total_tasks }}</div>
+                </div>
+
+                <div class="stat-card-mini">
+                    <div class="stat-label">ĐANG THỰC HIỆN</div>
+                    <div class="stat-value stat-progress">{{ in_progress_tasks }}</div>
+                </div>
+
+                <div class="stat-card-mini">
+                    <div class="stat-label">ĐÃ HOÀN THÀNH</div>
+                    <div class="stat-value stat-completed">{{ completed_tasks }}</div>
+                </div>
+
+                <div class="stat-card-mini">
+                    <div class="stat-label">VƯỚNG MẮC</div>
+                    <div class="stat-value stat-stuck">{{ stuck_tasks }}</div>
+                </div>
+
+                <!-- 2 ACTION BUTTONS -->
+                <button type="button" class="btn btn-create-project" data-bs-toggle="modal" data-bs-target="#createTaskModal">
+                    <i class="bi bi-plus-lg"></i>
+                    <span>Tạo Dự Án Mới</span>
+                </button>
+
+                <button type="button" class="btn btn-report-work" data-bs-toggle="modal" data-bs-target="#reportModal">
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span>Báo Cáo Công Việc</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 1: TASK LIST CARD -->
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                    <h5 class="fw-bold mb-0 text-dark">
+                        <i class="bi bi-list-task me-2 text-primary"></i>Danh sách nhiệm vụ & dự án cá nhân
+                    </h5>
+                    <span class="badge bg-light text-secondary border px-3 py-1 fw-bold">{{ tasks|length }} công việc</span>
+                </div>
+                <!-- BỘ LỌC TRẠNG THÁI (FILTER PILLS) -->
+                <div class="btn-group btn-group-sm" role="group" id="taskFilterGroup">
+                    <button type="button" class="btn btn-outline-primary active" onclick="filterUserTasks('all', this)">Tất cả ({{ total_tasks }})</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="filterUserTasks('Đang thực hiện', this)">Đang làm ({{ in_progress_tasks }})</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="filterUserTasks('Đã hoàn thành', this)">Hoàn thành ({{ completed_tasks }})</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="filterUserTasks('Vướng mắc', this)">Vướng mắc ({{ stuck_tasks }})</button>
+                </div>
+            </div>
+
+            {% if tasks %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr style="font-size: 0.78rem; text-transform: uppercase; color: #64748b;">
+                            <th style="width: 50px;">STT</th>
+                            <th>Tên công việc / Dự án</th>
+                            <th>Mức độ</th>
+                            <th>Hạn chót</th>
+                            <th>Trạng thái</th>
+                            <th>Mô tả</th>
+                            <th class="text-end">Cập nhật</th>
+                            <th class="text-center" style="width: 60px;">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr class="task-row" data-status="{{ task.status }}">
+                            <td class="fw-bold text-muted">{{ loop.index }}</td>
+                            <td>
+                                <span class="fw-bold text-dark">{{ task.title }}</span>
+                            </td>
+                            <td>
+                                {% if task.priority == 'Khẩn cấp' %}
+                                <span class="badge bg-danger">Khẩn cấp</span>
+                                {% elif task.priority == 'Quan trọng' %}
+                                <span class="badge bg-warning text-dark">Quan trọng</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Bình thường</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-muted" style="font-size: 0.88rem;">
+                                {% if task.deadline %}
+                                <i class="bi bi-calendar3 me-1"></i>{{ task.deadline.strftime('%d/%m/%Y') }}
+                                {% else %}
+                                <em>Không có</em>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.status == 'Đã hoàn thành' %}
+                                <span class="badge-status-completed"><i class="bi bi-check-circle-fill me-1"></i>Đã hoàn thành</span>
+                                {% elif task.status == 'Vướng mắc' %}
+                                <span class="badge-status-stuck"><i class="bi bi-exclamation-triangle-fill me-1"></i>Vướng mắc</span>
+                                {% else %}
+                                <span class="badge-status-progress"><i class="bi bi-arrow-repeat me-1"></i>Đang thực hiện</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-muted" style="font-size: 0.85rem; max-width: 240px;">
+                                {{ task.description or '—' }}
+                            </td>
+                            <td class="text-end">
+                                <div class="d-inline-flex gap-1 align-items-center">
+                                    <!-- Status update quick select -->
+                                    <form action="{{ url_for('user_update_task_status', id=task.id) }}" method="POST" class="m-0">
+                                        <select name="status" class="form-select form-select-sm" style="width: 135px; font-size: 0.78rem;" onchange="this.form.submit()">
+                                            <option value="Đang thực hiện" {% if task.status == 'Đang thực hiện' %}selected{% endif %}>Đang thực hiện</option>
+                                            <option value="Đã hoàn thành" {% if task.status == 'Đã hoàn thành' %}selected{% endif %}>Đã hoàn thành</option>
+                                            <option value="Vướng mắc" {% if task.status == 'Vướng mắc' %}selected{% endif %}>Vướng mắc</option>
+                                        </select>
+                                    </form>
+                                    <!-- Edit task button -->
+                                    <button type="button" class="btn btn-sm btn-outline-secondary p-1 px-2" title="Chỉnh sửa chi tiết" 
+                                            onclick="openEditTaskModal({{ task.id }}, {{ task.title|tojson }}, {{ (task.deadline.strftime('%Y-%m-%d') if task.deadline else '')|tojson }}, {{ task.priority|tojson }}, {{ task.status|tojson }}, {{ (task.description or '')|tojson }})">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <form action="{{ url_for('user_delete_task', id=task.id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa công việc này không?');" class="m-0">
+                                    <button type="submit" class="btn btn-link text-danger p-0" title="Xóa công việc">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-folder2-open display-4 text-muted"></i>
+                <p class="text-muted mt-3 mb-2">Bạn hiện chưa có công việc hoặc dự án nào.</p>
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createTaskModal">
+                    <i class="bi bi-plus-lg me-1"></i>Tạo dự án mới ngay
+                </button>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- SECTION 2: RECENT REPORTS SUMMARY CARD -->
+        {% if reports %}
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold mb-0 text-dark">
+                    <i class="bi bi-clock-history me-2 text-success"></i>Báo cáo gần đây của bạn
+                </h6>
+                <span class="text-muted" style="font-size: 0.8rem;">Tổng: {{ reports|length }} báo cáo</span>
+            </div>
+            <div class="list-group list-group-flush">
+                {% for r in reports %}
+                <div class="list-group-item px-0 py-2 border-0 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                <i class="bi bi-calendar2-check me-1"></i>{{ r.report_date.strftime('%d/%m/%Y') }}
+                            </span>
+                            <small class="text-muted">{{ r.created_at.strftime('%H:%M - %d/%m/%Y') if r.created_at else '' }}</small>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            {% if r.can_edit %}
+                            <button type="button" class="btn btn-link text-primary p-0" title="Chỉnh sửa báo cáo"
+                                    data-id="{{ r.id }}"
+                                    data-date="{{ r.report_date.strftime('%Y-%m-%d') }}"
+                                    data-worktypes="{{ r.work_types }}"
+                                    data-desc="{{ r.description }}"
+                                    onclick="handleOpenEditReport(this)" style="font-size: 0.88rem; line-height: 1;">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <form action="{{ url_for('user_delete_report', id=r.id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa báo cáo này không?');" class="m-0">
+                                <button type="submit" class="btn btn-link text-danger p-0" title="Xóa báo cáo" style="font-size: 0.88rem; line-height: 1;">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="mt-1">
+                        <strong class="text-dark" style="font-size: 0.88rem;">Hạng mục:</strong> 
+                        <span class="text-primary fw-semibold">{{ r.work_types }}</span>
+                    </div>
+                    <div class="text-muted small mt-1">
+                        {{ r.description }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    <!-- MODAL 1: TẠO DỰ ÁN MỚI -->
+    <div class="modal fade" id="createTaskModal" tabindex="-1" aria-labelledby="createTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ url_for('user_create_task') }}" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createTaskModalLabel">
+                            <i class="bi bi-plus-circle me-1 text-primary"></i>Tạo Dự Án / Công Việc Mới
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Tên dự án / Công việc <span class="text-danger">*</span></label>
+                            <input type="text" name="title" class="form-control" placeholder="Ví dụ: Nâng cấp hệ thống máy in, Setup máy tính..." required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Ngày hoàn thiện (Deadline)</label>
+                                <input type="date" name="deadline" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Loại dự án / Mức độ</label>
+                                <select name="priority" class="form-select">
+                                    <option value="Bình thường">Bình thường</option>
+                                    <option value="Quan trọng">Quan trọng</option>
+                                    <option value="Khẩn cấp">Khẩn cấp</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả chi tiết</label>
+                            <textarea name="description" class="form-control" rows="3" placeholder="Nhập mục tiêu và yêu cầu của dự án..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary fw-bold px-4">Lưu Dự Án</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: BÁO CÁO CÔNG VIỆC -->
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <form action="{{ url_for('user_create_report') }}" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportModalLabel">
+                            <i class="bi bi-pencil-square me-1 text-success"></i>Báo Cáo Công Việc Hàng Ngày
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- NGÀY BÁO CÁO -->
+                        <div class="mb-3">
+                            <label class="form-label">Ngày báo cáo <span class="text-danger">*</span></label>
+                            <input type="date" name="report_date" class="form-control" value="{{ today_str }}" required>
+                        </div>
+
+                        <!-- LOẠI CÔNG VIỆC (CHECKBOXES) -->
+                        <div class="mb-3">
+                            <label class="form-label d-block">Loại công việc hôm nay (chọn một hoặc nhiều mục)</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <label class="work-type-pill">
+                                    <input type="checkbox" name="work_types" value="Sửa chữa">
+                                    <span>Sửa chữa</span>
+                                </label>
+                                <label class="work-type-pill">
+                                    <input type="checkbox" name="work_types" value="Setup">
+                                    <span>Setup</span>
+                                </label>
+                                <label class="work-type-pill">
+                                    <input type="checkbox" name="work_types" value="Hỗ trợ">
+                                    <span>Hỗ trợ</span>
+                                </label>
+                                <label class="work-type-pill">
+                                    <input type="checkbox" name="work_types" value="Lập trình">
+                                    <span>Lập trình</span>
+                                </label>
+                                <label class="work-type-pill">
+                                    <input type="checkbox" name="work_types" value="Khác">
+                                    <span>Khác</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- MÔ TẢ CHI TIẾT -->
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả công việc đã thực hiện <span class="text-danger">*</span></label>
+                            <textarea name="description" class="form-control" rows="4" placeholder="Ví dụ: Đã sửa máy in tầng 2, cấu hình lại mạng LAN cho phòng A11A, test xong module đăng nhập..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-success fw-bold px-4">Gửi Báo Cáo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: CHỈNH SỬA DỰ ÁN / CÔNG VIỆC -->
+    <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="editTaskForm" action="" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTaskModalLabel">
+                            <i class="bi bi-pencil-square me-1 text-primary"></i>Chỉnh Sửa Công Việc
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Tên dự án / Công việc <span class="text-danger">*</span></label>
+                            <input type="text" id="editTaskTitle" name="title" class="form-control" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Hạn chót (Deadline)</label>
+                                <input type="date" id="editTaskDeadline" name="deadline" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Mức độ ưu tiên</label>
+                                <select id="editTaskPriority" name="priority" class="form-select">
+                                    <option value="Bình thường">Bình thường</option>
+                                    <option value="Quan trọng">Quan trọng</option>
+                                    <option value="Khẩn cấp">Khẩn cấp</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Trạng thái tiến độ</label>
+                            <select id="editTaskStatus" name="status" class="form-select">
+                                <option value="Đang thực hiện">Đang thực hiện</option>
+                                <option value="Đã hoàn thành">Đã hoàn thành</option>
+                                <option value="Vướng mắc">Vướng mắc</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả chi tiết</label>
+                            <textarea id="editTaskDesc" name="description" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary fw-bold px-4">Lưu Thay Đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: CHỈNH SỬA BÁO CÁO (CHUẨN THEO ẢNH 2 CỦA USER) -->
+    <div class="modal fade" id="editReportModal" tabindex="-1" aria-labelledby="editReportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
+            <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 25px 60px rgba(0,0,0,0.25); overflow: hidden;">
+                <form id="editReportForm" action="" method="POST">
+                    <!-- HEADER -->
+                    <div class="modal-header border-0 pb-2 px-4 pt-4 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div style="width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg, #4f46e5, #6366f1); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35); flex-shrink: 0;">
+                                <i class="bi bi-file-earmark-text-fill"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-bold mb-0 text-dark" id="editReportModalLabel" style="font-size: 1.3rem; letter-spacing: -0.3px;">
+                                    Cập nhật Báo Cáo
+                                </h4>
+                                <div class="text-muted" style="font-size: 0.85rem;">
+                                    Chỉnh sửa thông tin báo cáo
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="modal-body px-4 py-3" style="max-height: 520px; overflow-y: auto;">
+                        <!-- NGÀY BÁO CÁO -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-secondary text-uppercase d-flex align-items-center gap-1" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                                <i class="bi bi-calendar2-check"></i> NGÀY BÁO CÁO
+                            </label>
+                            <input type="date" id="editReportDate" name="report_date" class="form-control" style="border-radius: 8px;" readonly required>
+                        </div>
+
+                        <!-- HẠNG MỤC CÔNG VIỆC (CHECKBOXES CÓ KHUNG) -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-secondary text-uppercase d-flex align-items-center gap-1" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                                <i class="bi bi-check2-square"></i> HẠNG MỤC CÔNG VIỆC
+                            </label>
+                            <div class="d-flex flex-column gap-2" id="editWorkTypesContainer">
+                                <label class="edit-work-type-item">
+                                    <input type="checkbox" name="work_types" value="Sửa chữa" onchange="toggleWorkTypeBox(this)">
+                                    <span class="fw-semibold">SỬA CHỮA</span>
+                                </label>
+                                <label class="edit-work-type-item">
+                                    <input type="checkbox" name="work_types" value="Setup" onchange="toggleWorkTypeBox(this)">
+                                    <span class="fw-semibold">SETUP</span>
+                                </label>
+                                <label class="edit-work-type-item">
+                                    <input type="checkbox" name="work_types" value="Hỗ trợ" onchange="toggleWorkTypeBox(this)">
+                                    <span class="fw-semibold">HỖ TRỢ</span>
+                                </label>
+                                <label class="edit-work-type-item">
+                                    <input type="checkbox" name="work_types" value="Lập trình" onchange="toggleWorkTypeBox(this)">
+                                    <span class="fw-semibold">LẬP TRÌNH</span>
+                                </label>
+                                <label class="edit-work-type-item">
+                                    <input type="checkbox" name="work_types" value="Khác" onchange="toggleWorkTypeBox(this)">
+                                    <span class="fw-semibold">KHÁC</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- MÔ TẢ CÔNG VIỆC -->
+                        <div class="mb-2">
+                            <label class="form-label fw-bold text-secondary text-uppercase d-flex align-items-center gap-1" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                                <i class="bi bi-file-earmark-text"></i> MÔ TẢ CÔNG VIỆC
+                            </label>
+                            <textarea id="editReportDesc" name="description" class="form-control" rows="4" style="border-radius: 8px; font-size: 0.95rem;" placeholder="Nhập mô tả chi tiết công việc..." required></textarea>
+                        </div>
+                        <div class="text-muted d-flex align-items-center gap-1 mb-2" style="font-size: 0.8rem;">
+                            <i class="bi bi-file-earmark-text"></i> Báo cáo sẽ được lưu để quản lý xem
+                        </div>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="modal-footer border-0 px-4 pb-4 pt-2 d-flex gap-2">
+                        <button type="button" class="btn btn-light border flex-grow-1 py-2 fw-semibold" style="border-radius: 12px; color: #475569;" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn flex-grow-1 py-2 fw-semibold text-white d-flex align-items-center justify-content-center gap-2" style="background: #6366f1; border-radius: 12px; border: none; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);">
+                            <i class="bi bi-file-earmark-text"></i> Cập nhật
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL THÔNG BÁO CHO USER KHI MỞ ỨNG DỤNG (CHUẨN THEO ẢNH 3 CỦA USER) -->
+    <div class="modal fade" id="userNoticeModal" tabindex="-1" aria-labelledby="userNoticeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+            <div class="modal-content" style="border-radius: 18px; border: none; box-shadow: 0 25px 60px rgba(0,0,0,0.25); overflow: hidden;">
+                <!-- HEADER BANNER MÀU CAM / HỔ PHÁCH -->
+                <div class="px-4 py-3 d-flex align-items-center justify-content-between" style="background: #d97706;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width: 42px; height: 42px; border-radius: 50%; background: rgba(255, 255, 255, 0.22); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 1.3rem; flex-shrink: 0;">
+                            <i class="bi bi-megaphone-fill"></i>
+                        </div>
+                        <h4 class="fw-bold mb-0 text-white" id="userNoticeModalLabel" style="font-size: 1.35rem; letter-spacing: -0.3px;">
+                            Thông Báo Mới
+                        </h4>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- NỘI DUNG THÔNG BÁO -->
+                <div class="modal-body px-4 py-4" style="background: #ffffff;">
+                    <div style="white-space: pre-wrap; font-size: 0.95rem; color: #1e293b; line-height: 1.65; font-weight: 500;">{{ dept_notice.content if dept_notice else '' }}</div>
+                </div>
+
+                <!-- NÚT ĐÓNG CĂN GIỮA -->
+                <div class="modal-footer justify-content-center border-0 pt-0 pb-4" style="background: #ffffff;">
+                    <button type="button" class="btn" data-bs-dismiss="modal" 
+                            style="background: #f59e0b; color: white; border-radius: 25px; padding: 10px 48px; font-weight: 700; border: none; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); cursor: pointer;">
+                        Đã hiểu / Đóng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% if show_notice and dept_notice and dept_notice.is_active and dept_notice.content %}
+            const userNoticeEl = document.getElementById('userNoticeModal');
+            if (userNoticeEl) {
+                const noticeModal = bootstrap.Modal.getOrCreateInstance(userNoticeEl);
+                noticeModal.show();
+            }
+            {% endif %}
+        });
+
+        function filterUserTasks(status, btn) {
+            // Cập nhật trạng thái active cho nút bấm
+            const group = document.getElementById('taskFilterGroup');
+            if (group) {
+                group.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+            }
+            if (btn) btn.classList.add('active');
+
+            // Lọc các hàng trong bảng
+            const rows = document.querySelectorAll('.task-row');
+            rows.forEach(row => {
+                const rowStatus = row.getAttribute('data-status');
+                if (status === 'all' || rowStatus === status) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function openEditTaskModal(id, title, deadline, priority, status, description) {
+            document.getElementById('editTaskForm').action = `/user/tasks/edit/${id}`;
+            document.getElementById('editTaskTitle').value = title;
+            document.getElementById('editTaskDeadline').value = deadline || '';
+            document.getElementById('editTaskPriority').value = priority || 'Bình thường';
+            document.getElementById('editTaskStatus').value = status || 'Đang thực hiện';
+            document.getElementById('editTaskDesc').value = description || '';
+
+            const modal = new bootstrap.Modal(document.getElementById('editTaskModal'));
+            modal.show();
+        }
+
+        function toggleWorkTypeBox(checkbox) {
+            const parent = checkbox.closest('.edit-work-type-item');
+            if (parent) {
+                if (checkbox.checked) {
+                    parent.classList.add('checked');
+                } else {
+                    parent.classList.remove('checked');
+                }
+            }
+        }
+
+        function handleOpenEditReport(btn) {
+            const id = btn.getAttribute('data-id');
+            const date = btn.getAttribute('data-date');
+            const workTypesStr = btn.getAttribute('data-worktypes') || '';
+            const desc = btn.getAttribute('data-desc') || '';
+
+            document.getElementById('editReportForm').action = `/user/report/edit/${id}`;
+            const dateInput = document.getElementById('editReportDate');
+            if (dateInput) {
+                dateInput.value = date || '';
+            }
+            const descInput = document.getElementById('editReportDesc');
+            if (descInput) {
+                descInput.value = desc || '';
+            }
+
+            // Normalizing work types for matching
+            const currentTypes = workTypesStr.split(',').map(s => s.trim().toUpperCase());
+            document.querySelectorAll('#editReportModal input[name="work_types"]').forEach(cb => {
+                const val = cb.value.toUpperCase().trim();
+                const isMatch = currentTypes.includes(val);
+                cb.checked = isMatch;
+                const item = cb.closest('.edit-work-type-item');
+                if (item) {
+                    if (isMatch) item.classList.add('checked');
+                    else item.classList.remove('checked');
+                }
+            });
+
+            const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('editReportModal'));
+            modal.show();
+        }
+    </script>
+</body>
+</html>

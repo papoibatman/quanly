@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Nhân Sự - WORKFLOW</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* MAIN WRAPPER */
+        .main-wrapper {
+            margin-left: 270px;
+            padding: 24px 36px 48px;
+            min-height: 100vh;
+        }
+
+        .breadcrumb-tag {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #64748b;
+            letter-spacing: 0.8px;
+            margin-bottom: 20px;
+        }
+
+        /* TOP ACTION HEADER */
+        .page-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .page-header-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .filter-pills-group {
+            display: inline-flex;
+            background: #e2e8f0;
+            border-radius: 30px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .pill-tab {
+            border: none;
+            background: transparent;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: #64748b;
+            padding: 6px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+        }
+
+        .pill-tab.active {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .pill-tab:hover:not(.active) {
+            color: #0f172a;
+        }
+
+        .btn-add-emp {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.82rem;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+            transition: all 0.15s ease;
+        }
+
+        .btn-add-emp:hover {
+            background: #1d4ed8;
+            color: #ffffff;
+        }
+
+        /* CARDS GRID */
+        .emp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 18px;
+        }
+
+        .emp-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 22px 14px 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            position: relative;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .emp-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            border-color: #cbd5e1;
+        }
+
+        .emp-avatar-box {
+            width: 68px;
+            height: 68px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.45rem;
+            font-weight: 800;
+            margin: 0 auto 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            letter-spacing: 0.5px;
+        }
+
+        .emp-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 2px;
+            line-height: 1.2;
+        }
+
+        .emp-code {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .emp-pos-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #dbeafe;
+            max-width: 90%;
+        }
+
+        /* 2 COLUMNS STATS */
+        .emp-stats-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 10px 0;
+            margin-top: 6px;
+            margin-bottom: 12px;
+            border-top: 1px dashed #f1f5f9;
+            border-bottom: 1px dashed #f1f5f9;
+        }
+
+        .emp-stat-col {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+
+        .stat-sub {
+            font-size: 0.64rem;
+            font-weight: 700;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 24px;
+            background: #e2e8f0;
+        }
+
+        /* BUTTON DETAILS */
+        .btn-detail-profile {
+            width: 100%;
+            background: #0b1329;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 9px 0;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-detail-profile:hover {
+            background: #1e293b;
+            color: #ffffff;
+        }
+
+        /* INACTIVE EMPLOYEE CARD & BADGES (CHUẨN THEO ẢNH USER) */
+        .badge-inactive-pill {
+            background: #b97a7a;
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            letter-spacing: 0.2px;
+        }
+
+        .btn-restore-corner {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: #f0fdf4;
+            border: 1px solid #dcfce7;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            z-index: 2;
+        }
+
+        .btn-restore-corner:hover {
+            background: #10b981;
+            color: #ffffff;
+            border-color: #10b981;
+            transform: scale(1.08);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-detail-inactive {
+            background: #475569 !important;
+        }
+
+        .btn-detail-inactive:hover {
+            background: #334155 !important;
+        }
+
+        /* INACTIVE PROFILE MODAL CONTACT CARDS */
+        .info-contact-card {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.15s ease;
+        }
+
+        .info-contact-card:hover {
+            background: #f1f5f9;
+            border-color: #e2e8f0;
+        }
+
+        .info-icon-wrapper {
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+        }
+
+        .info-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .info-value {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        /* BADGE CURRENT USER */
+        .badge-self {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #dcfce7;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 12px;
+        }
+
+        /* MODAL STYLES */
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 20px 24px;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 9px;
+            border: 1px solid #cbd5e1;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    {% if is_admin %}
+        {% include 'sidebar_admin.html' %}
+    {% else %}
+        {% include 'sidebar_user.html' %}
+    {% endif %}
+
+    <!-- MAIN CONTENT -->
+    <main class="main-wrapper">
+        <!-- BREADCRUMB -->
+        <div class="breadcrumb-tag">/ QUẢN LÝ NHÂN SỰ</div>
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm mb-4" role="alert">
+                    <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- HEADER ROW: TITLE & PILLS & ADD BUTTON -->
+        <div class="page-header-row">
+            <h1 class="page-header-title" id="pageHeaderTitle">
+                {% if current_tab == 'inactive' %}
+                NHÂN SỰ ({{ inactive_employees|length }}) - NHÓM {{ selected_dept }}
+                {% else %}
+                NHÂN SỰ ({{ active_employees|length }}) - NHÓM {{ selected_dept }}
+                {% endif %}
+            </h1>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="filter-pills-group">
+                    <button class="pill-tab {% if current_tab != 'inactive' %}active{% endif %}" id="tabActiveBtn" type="button" onclick="switchEmpTab('active')">
+                        Đang làm việc ({{ active_employees|length }})
+                    </button>
+                    <button class="pill-tab {% if current_tab == 'inactive' %}active{% endif %}" id="tabInactiveBtn" type="button" onclick="switchEmpTab('inactive')">
+                        Đã nghỉ việc / Đã ẩn ({{ inactive_employees|length }})
+                    </button>
+                </div>
+
+                <!-- CHỈ ADMIN MỚI CÓ NÚT THÊM NHÂN VIÊN VÀ CHỈ HIỆN KHI Ở TAB ACTIVE -->
+                {% if is_admin %}
+                <button type="button" class="btn-add-emp {% if current_tab == 'inactive' %}d-none{% endif %}" id="btnAddEmpHeader" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                    <i class="bi bi-person-plus-fill"></i>
+                    <span>+ Thêm nhân sự</span>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 1. CARDS GRID CHO NHÂN SỰ ĐANG LÀM VIỆC -->
+        <div class="emp-grid" id="activeEmpGrid" {% if current_tab == 'inactive' %}style="display: none;"{% endif %}>
+            {% for emp in active_employees %}
+            <div class="emp-card">
+                {% if emp.employee_code == current_user.employee_code %}
+                <span class="badge-self">Bạn</span>
+                {% endif %}
+
+                <div class="emp-avatar-box" style="background-color: {{ emp.avatar_color }};">
+                    {{ emp.initials }}
+                </div>
+                
+                <div class="emp-name text-truncate" title="{{ emp.full_name }}">{{ emp.full_name }}</div>
+                <div class="emp-code">{{ emp.employee_code }}</div>
+                
+                <div class="mb-3">
+                    <span class="emp-pos-badge text-truncate" title="{{ emp.position or 'NHÂN VIÊN' }}">
+                        {{ emp.position_short or 'NHÂN VIÊN' }}
+                    </span>
+                </div>
+
+                <div class="emp-stats-row">
+                    <div class="emp-stat-col">
+                        <div class="stat-number">{{ emp.total_tasks }}</div>
+                        <div class="stat-sub">DỰ ÁN</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="emp-stat-col">
+                        <div class="stat-number">{{ emp.on_time_pct }}%</div>
+                        <div class="stat-sub">ĐÚNG HẠN</div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-detail-profile" 
+                    onclick="viewProfile('{{ emp.id }}', '{{ emp.employee_code }}', '{{ emp.full_name }}', '{{ emp.email or '' }}', '{{ emp.phone or '' }}', '{{ emp.emergency_phone or '' }}', '{{ emp.position or '' }}', '{{ emp.department or '' }}', '{{ emp.role }}', '{{ emp.start_date.strftime('%Y-%m-%d') if emp.start_date else '' }}', '{{ emp.total_tasks }}', '{{ emp.on_time_pct }}', 'active')">
+                    Xem Chi Tiết Hồ Sơ
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- 2. CARDS GRID CHO NHÂN SỰ ĐÃ NGHỈ VIỆC / ĐÃ ẨN (CHUẨN THEO ẢNH 2 CỦA USER) -->
+        <div id="inactiveEmpGrid" {% if current_tab != 'inactive' %}style="display: none;"{% endif %}>
+            {% if inactive_employees|length == 0 %}
+            <div class="text-center py-5 my-3 bg-white rounded-4 border">
+                <div style="font-size: 3.5rem; color: #cbd5e1; line-height: 1;">
+                    <i class="bi bi-person-slash"></i>
+                </div>
+                <div class="text-muted mt-3 fw-medium" style="font-size: 0.95rem;">
+                    Hiện tại không có nhân sự nghỉ việc / ẩn.
+                </div>
+            </div>
+            {% else %}
+            <div class="emp-grid">
+                {% for emp in inactive_employees %}
+                <div class="emp-card inactive-emp-card">
+                    <!-- Nút khôi phục góc trên bên phải (khớp icon Image 2) -->
+                    {% if is_admin %}
+                    <a href="{{ url_for('restore_employee', id=emp.id) }}" class="btn-restore-corner" title="Khôi phục thành viên" onclick="return confirm('Bạn có chắc chắn muốn khôi phục nhân sự {{ emp.full_name }} về trạng thái đang làm việc?')">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </a>
+                    {% endif %}
+
+                    <div class="emp-avatar-box" style="background-color: {{ emp.avatar_color }};">
+                        {{ emp.initials }}
+                    </div>
+                    
+                    <div class="emp-name text-truncate" title="{{ emp.full_name }}">{{ emp.full_name }}</div>
+                    <div class="emp-code">{{ emp.employee_code }}</div>
+                    
+                    <div class="mb-2">
+                        <span class="emp-pos-badge text-truncate" title="{{ emp.position or 'NHÂN VIÊN' }}">
+                            {{ emp.position_short or 'NHÂN VIÊN' }}
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="badge-inactive-pill">
+                            Đã ẩn / Nghỉ việc
+                        </span>
+                    </div>
+
+                    <div class="emp-stats-row">
+                        <div class="emp-stat-col">
+                            <div class="stat-number">{{ emp.total_tasks }}</div>
+                            <div class="stat-sub">DỰ ÁN</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="emp-stat-col">
+                            <div class="stat-number">{{ emp.on_time_pct }}%</div>
+                            <div class="stat-sub">ĐÚNG HẠN</div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-detail-profile btn-detail-inactive" 
+                        onclick="viewInactiveProfile('{{ emp.id }}', '{{ emp.employee_code }}', '{{ emp.full_name }}', '{{ emp.email or '' }}', '{{ emp.phone or '' }}', '{{ emp.emergency_phone or '' }}', '{{ emp.position or '' }}', '{{ emp.department or '' }}', '{{ emp.role }}', '{{ emp.start_date_formatted }}', '{{ emp.avatar_color }}', '{{ emp.initials }}', '{{ emp.total_tasks }}', '{{ emp.on_time_pct }}')">
+                        Xem Chi Tiết Hồ Sơ
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- MODAL 1: XEM CHI TIẾT & CHỈNH SỬA HỒ SƠ NHÂN SỰ -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <form id="profileForm" method="POST" action="">
+                    <div class="modal-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <div id="modalAvatar" class="emp-avatar-box m-0" style="width: 48px; height: 48px; font-size: 1.15rem;"></div>
+                            <div>
+                                <h5 class="modal-title fw-bold m-0" id="profileModalLabel">Chi Tiết Hồ Sơ</h5>
+                                <div class="text-muted small" id="profileModalSubtitle">Thông tin nhân sự</div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <!-- BANNER THÔNG BÁO CHO USER KHI XEM ĐỒNG NGHIỆP -->
+                        <div id="readOnlyNotice" class="alert alert-info py-2 px-3 small d-flex align-items-center mb-3 d-none">
+                            <i class="bi bi-info-circle-fill me-2 fs-6"></i>
+                            <span>Bạn đang xem thông tin hồ sơ của đồng nghiệp (Chỉ đọc).</span>
+                        </div>
+
+                        <!-- BANNER THÔNG BÁO CHO USER KHI XEM HỒ SƠ CỦA CHÍNH MÌNH -->
+                        <div id="selfEditNotice" class="alert alert-success py-2 px-3 small d-flex align-items-center mb-3 d-none">
+                            <i class="bi bi-check-circle-fill me-2 fs-6"></i>
+                            <span>Đây là hồ sơ của bạn. Bạn có thể tự cập nhật họ tên, liên hệ và mật khẩu của mình.</span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Mã Nhân Viên</label>
+                                <input type="text" id="mCode" name="employee_code" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Họ và Tên</label>
+                                <input type="text" id="mName" name="full_name" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Phòng Ban</label>
+                                <select id="mDept" name="department" class="form-select">
+                                    <option value="TDH">TDH</option>
+                                    <option value="A11A">A11A</option>
+                                    <option value="LENS">LENS</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Chức Vụ</label>
+                                <input type="text" id="mPos" name="position" class="form-control">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" id="mEmail" name="email" class="form-control" placeholder="example@workflow.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Số Điện Thoại</label>
+                                <input type="text" id="mPhone" name="phone" class="form-control" placeholder="0901234567">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">SĐT Người Thân</label>
+                                <input type="text" id="mEmergency" name="emergency_phone" class="form-control" placeholder="SĐT người thân khẩn cấp">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Ngày Vào Làm</label>
+                                <input type="date" id="mStartDate" name="start_date" class="form-control">
+                            </div>
+
+                            <!-- MẬT KHẨU (CHỈ HIỂN THỊ KHI ADMIN SỬA HOẶC USER TỰ SỬA CHÍNH MÌNH) -->
+                            <div class="col-md-6" id="pwdGroup">
+                                <label class="form-label">Mật Khẩu Mới</label>
+                                <input type="text" id="mPwd" name="password" class="form-control" placeholder="Để trống nếu không muốn đổi...">
+                            </div>
+
+                            <!-- VAI TRÒ HỆ THỐNG (CHỈ ADMIN MỚI ĐƯỢC CHỈNH) -->
+                            <div class="col-md-6" id="roleGroup">
+                                <label class="form-label">Vai Trò Hệ Thống</label>
+                                <select id="mRole" name="role" class="form-select">
+                                    <option value="user">Nhân viên / Thành viên</option>
+                                    <option value="admin">Quản trị viên (Admin)</option>
+                                </select>
+                            </div>
+
+                            <!-- CHỈ SỐ HOẠT ĐỘNG THỐNG KÊ (READONLY) -->
+                            <div class="col-12 mt-3 pt-3 border-top">
+                                <div class="row text-center g-2">
+                                    <div class="col-6">
+                                        <div class="p-2 bg-light rounded-3 border">
+                                            <div class="text-muted small fw-bold">TỔNG SỐ DỰ ÁN</div>
+                                            <div class="fs-5 fw-bold text-dark" id="mTotalTasks">0</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-2 bg-light rounded-3 border">
+                                            <div class="text-muted small fw-bold">TỶ LỆ ĐÚNG HẠN</div>
+                                            <div class="fs-5 fw-bold text-success" id="mOnTimePct">0%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <!-- NÚT XÓA / ẨN: CHỈ ADMIN MỚI CÓ THỂ BẤM -->
+                            {% if is_admin %}
+                            <a id="btnDeleteEmp" href="#" class="btn btn-outline-danger fw-bold" onclick="return confirm('Bạn có chắc chắn muốn chuyển nhân sự này sang danh sách Đã nghỉ việc / Đã ẩn không?')">
+                                <i class="bi bi-person-x-fill me-1"></i>Cho Nghỉ Việc / Ẩn
+                            </a>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-light border fw-bold" data-bs-dismiss="modal">Đóng</button>
+                            <!-- NÚT LƯU: CHỈ HIỂN THỊ KHI ADMIN SỬA HOẶC USER SỬA CHÍNH MÌNH -->
+                            <button type="submit" id="btnSubmitProfile" class="btn btn-primary fw-bold px-4">
+                                <i class="bi bi-check-lg me-1"></i>Lưu Thay Đổi
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: THÊM NHÂN SỰ MỚI (CHỈ ADMIN MỚI THẤY VÀ MỞ ĐƯỢC) -->
+    {% if is_admin %}
+    <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <form method="POST" action="{{ url_for('add_employee') }}">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold" id="addEmployeeModalLabel">
+                            <i class="bi bi-person-plus-fill me-2 text-primary"></i>Thêm Nhân Sự Mới
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Mã Nhân Viên *</label>
+                                <input type="text" name="employee_code" class="form-control" placeholder="VD: NTV-1234" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Họ và Tên *</label>
+                                <input type="text" name="full_name" class="form-control" placeholder="Nhập họ và tên..." required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Phòng Ban *</label>
+                                <select name="department" class="form-select" required>
+                                    <option value="TDH" {% if selected_dept == 'TDH' %}selected{% endif %}>TDH</option>
+                                    <option value="A11A" {% if selected_dept == 'A11A' %}selected{% endif %}>A11A</option>
+                                    <option value="LENS" {% if selected_dept == 'LENS' %}selected{% endif %}>LENS</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Chức Vụ</label>
+                                <input type="text" name="position" class="form-control" placeholder="VD: Kỹ thuật viên, Leader, Dev...">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" placeholder="email@workflow.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Số Điện Thoại</label>
+                                <input type="text" name="phone" class="form-control" placeholder="0901234567">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">SĐT Người Thân</label>
+                                <input type="text" name="emergency_phone" class="form-control" placeholder="SĐT người thân khẩn cấp">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Ngày Vào Làm</label>
+                                <input type="date" name="start_date" class="form-control">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Mật Khẩu Khởi Tạo *</label>
+                                <input type="text" name="password" class="form-control" value="123456" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Vai Trò Hệ Thống</label>
+                                <select name="role" class="form-select">
+                                    <option value="user" selected>Nhân viên (Thành viên)</option>
+                                    <option value="admin">Quản trị viên (Admin)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light border fw-bold" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary fw-bold px-4">
+                            <i class="bi bi-person-check-fill me-1"></i>Tạo Nhân Sự
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- MODAL 3: XEM CHI TIẾT HỒ SƠ ĐÃ ẨN / NGHỈ VIỆC (CHUẨN THEO ẢNH 3 CỦA USER) -->
+    <div class="modal fade" id="inactiveProfileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 650px; width: 92%;">
+            <div class="modal-content" style="border-radius: 20px; padding: 28px; position: relative;">
+                <!-- NÚT ĐÓNG X GÓC TRÊN BÊN PHẢI -->
+                <button type="button" class="btn-close position-absolute" style="top: 24px; right: 24px;" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                <!-- HEADER PROFILE -->
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 pb-3 mb-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <div id="inactModalAvatar" style="width: 76px; height: 76px; border-radius: 50%; background-color: #60a5fa; color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; box-shadow: 0 4px 14px rgba(96, 165, 250, 0.35); flex-shrink: 0;">
+                            LB
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-1 text-dark" id="inactModalName" style="font-size: 1.45rem; letter-spacing: -0.3px;">
+                                Họ và Tên
+                            </h4>
+                            <div class="text-muted mb-2" id="inactModalPos" style="font-size: 0.92rem; font-weight: 500;">
+                                Chức vụ
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge" id="inactModalRoleBadge" style="background: #6366f1; color: white; border-radius: 20px; font-weight: 700; font-size: 0.75rem; padding: 4px 14px;">
+                                    staff
+                                </span>
+                                <span class="badge" style="background: #ef4444; color: white; border-radius: 20px; font-weight: 700; font-size: 0.75rem; padding: 4px 14px;">
+                                    Đã ẩn / Nghỉ việc
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CÁC NÚT HÀNH ĐỘNG GÓC TRÊN BÊN PHẢI -->
+                    <div class="d-flex align-items-center gap-2 ms-auto pt-2">
+                        {% if is_admin %}
+                        <button type="button" class="btn" id="btnEditFromInactive" style="background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.84rem; font-weight: 700; padding: 8px 16px;">
+                            <i class="bi bi-pencil me-1"></i>Chỉnh sửa
+                        </button>
+                        <a href="#" id="btnRestoreFromModal" class="btn" style="background: #10b981; color: white; border: none; border-radius: 10px; font-size: 0.84rem; font-weight: 700; padding: 8px 18px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);" onclick="return confirm('Bạn có chắc chắn muốn khôi phục thành viên này trở lại danh sách đang làm việc?')">
+                            <i class="bi bi-shield-check me-1"></i>Khôi phục thành viên
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- TIÊU ĐỀ SECTION THÔNG TIN LIÊN HỆ -->
+                <h6 class="fw-bold text-dark mt-3 mb-3" style="font-size: 0.95rem;">
+                    Thông tin liên hệ
+                </h6>
+
+                <!-- CÁC HỘP THÔNG TIN (EMAIL, SĐT, SĐT NGƯỜI THÂN, NGÀY VÀO LÀM) -->
+                <div class="d-flex flex-column gap-2 mb-2">
+                    <!-- EMAIL -->
+                    <div class="info-contact-card">
+                        <div class="info-icon-wrapper">
+                            <i class="bi bi-envelope text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="info-label">EMAIL</div>
+                            <div class="info-value" id="inactModalEmail">Chưa cập nhật</div>
+                        </div>
+                    </div>
+
+                    <!-- SỐ ĐIỆN THOẠI -->
+                    <div class="info-contact-card">
+                        <div class="info-icon-wrapper">
+                            <i class="bi bi-telephone text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="info-label">SỐ ĐIỆN THOẠI</div>
+                            <div class="info-value" id="inactModalPhone">Chưa cập nhật</div>
+                        </div>
+                    </div>
+
+                    <!-- SĐT NGƯỜI THÂN -->
+                    <div class="info-contact-card">
+                        <div class="info-icon-wrapper">
+                            <i class="bi bi-person text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="info-label">SĐT NGƯỜI THÂN</div>
+                            <div class="info-value" id="inactModalEmergency">Chưa cập nhật</div>
+                        </div>
+                    </div>
+
+                    <!-- NGÀY VÀO LÀM -->
+                    <div class="info-contact-card">
+                        <div class="info-icon-wrapper">
+                            <i class="bi bi-calendar3 text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="info-label">NGÀY VÀO LÀM</div>
+                            <div class="info-value" id="inactModalStartDate">Chưa cập nhật</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const IS_ADMIN = {{ 'true' if is_admin else 'false' }};
+        const CURRENT_USER_CODE = "{{ current_user.employee_code }}";
+        const ACTIVE_COUNT = {{ active_employees|length }};
+        const INACTIVE_COUNT = {{ inactive_employees|length }};
+        const CURRENT_DEPT = "{{ selected_dept }}";
+
+        function switchEmpTab(tab) {
+            const btnActive = document.getElementById('tabActiveBtn');
+            const btnInactive = document.getElementById('tabInactiveBtn');
+            const gridActive = document.getElementById('activeEmpGrid');
+            const gridInactive = document.getElementById('inactiveEmpGrid');
+            const titleEl = document.getElementById('pageHeaderTitle');
+            const btnAdd = document.getElementById('btnAddEmpHeader');
+
+            if (tab === 'active') {
+                btnActive.classList.add('active');
+                btnInactive.classList.remove('active');
+                if (gridActive) gridActive.style.display = '';
+                if (gridInactive) gridInactive.style.display = 'none';
+                if (titleEl) titleEl.textContent = `NHÂN SỰ (${ACTIVE_COUNT}) - NHÓM ${CURRENT_DEPT}`;
+                if (btnAdd) btnAdd.classList.remove('d-none');
+                history.replaceState(null, '', `?dept=${encodeURIComponent(CURRENT_DEPT)}&tab=active`);
+            } else {
+                btnInactive.classList.add('active');
+                btnActive.classList.remove('active');
+                if (gridActive) gridActive.style.display = 'none';
+                if (gridInactive) gridInactive.style.display = '';
+                if (titleEl) titleEl.textContent = `NHÂN SỰ (${INACTIVE_COUNT}) - NHÓM ${CURRENT_DEPT}`;
+                if (btnAdd) btnAdd.classList.add('d-none');
+                history.replaceState(null, '', `?dept=${encodeURIComponent(CURRENT_DEPT)}&tab=inactive`);
+            }
+        }
+
+        function viewInactiveProfile(id, code, name, email, phone, emergency, pos, dept, role, startDateFormatted, avatarColor, initials, totalTasks, onTimePct) {
+            document.getElementById('inactModalAvatar').textContent = initials || 'NV';
+            document.getElementById('inactModalAvatar').style.backgroundColor = avatarColor || '#60a5fa';
+            document.getElementById('inactModalName').textContent = name;
+            document.getElementById('inactModalPos').textContent = pos || 'Nhân viên';
+            document.getElementById('inactModalRoleBadge').textContent = (role === 'admin' ? 'admin' : 'staff');
+
+            document.getElementById('inactModalEmail').textContent = email || 'Chưa cập nhật';
+            document.getElementById('inactModalPhone').textContent = phone || 'Chưa cập nhật';
+            document.getElementById('inactModalEmergency').textContent = emergency || 'Chưa cập nhật';
+            document.getElementById('inactModalStartDate').textContent = startDateFormatted || 'Chưa cập nhật';
+
+            const btnRestore = document.getElementById('btnRestoreFromModal');
+            if (btnRestore) {
+                btnRestore.href = `/admin/restore/${id}`;
+            }
+
+            const btnEdit = document.getElementById('btnEditFromInactive');
+            if (btnEdit) {
+                btnEdit.onclick = function() {
+                    const inactModalEl = document.getElementById('inactiveProfileModal');
+                    const inactModal = bootstrap.Modal.getInstance(inactModalEl);
+                    if (inactModal) inactModal.hide();
+                    viewProfile(id, code, name, email, phone, emergency, pos, dept, role, '', totalTasks, onTimePct, 'inactive');
+                };
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('inactiveProfileModal'));
+            modal.show();
+        }
+
+        function viewProfile(id, code, name, email, phone, emergency, pos, dept, role, startDate, totalTasks, onTimePct, status = 'active') {
+            const form = document.getElementById('profileForm');
+            form.action = `/admin/edit/${id}`;
+
+            document.getElementById('mCode').value = code;
+            document.getElementById('mName').value = name;
+            document.getElementById('mEmail').value = email;
+            document.getElementById('mPhone').value = phone;
+            document.getElementById('mEmergency').value = emergency || '';
+            document.getElementById('mStartDate').value = startDate || '';
+            document.getElementById('mPos').value = pos;
+            document.getElementById('mDept').value = dept || 'TDH';
+            document.getElementById('mRole').value = role || 'user';
+            document.getElementById('mPwd').value = '';
+            document.getElementById('mTotalTasks').textContent = totalTasks;
+            document.getElementById('mOnTimePct').textContent = onTimePct + '%';
+
+            // Initials avatar
+            const parts = name.trim().split(/\s+/);
+            const initials = parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : name.slice(0, 2).toUpperCase();
+            const avatar = document.getElementById('modalAvatar');
+            avatar.textContent = initials;
+            avatar.style.backgroundColor = '#2563eb';
+
+            const readOnlyNotice = document.getElementById('readOnlyNotice');
+            const selfEditNotice = document.getElementById('selfEditNotice');
+            const btnSubmit = document.getElementById('btnSubmitProfile');
+            const btnDelete = document.getElementById('btnDeleteEmp');
+            const pwdGroup = document.getElementById('pwdGroup');
+            const roleGroup = document.getElementById('roleGroup');
+
+            const isSelf = (code === CURRENT_USER_CODE);
+
+            if (IS_ADMIN) {
+                // ADMIN CÓ TOÀN QUYỀN SỬA VÀ XÓA BẤT KỲ NHÂN SỰ NÀO
+                document.getElementById('profileModalLabel').textContent = `Hồ Sơ Nhân Sự: ${name}`;
+                document.getElementById('profileModalSubtitle').textContent = `Mã: ${code} - Quản trị toàn quyền`;
+                readOnlyNotice.classList.add('d-none');
+                selfEditNotice.classList.add('d-none');
+                
+                // Mở khóa các input cho Admin
+                ['mCode', 'mName', 'mEmail', 'mPhone', 'mEmergency', 'mStartDate', 'mPos', 'mDept', 'mRole', 'mPwd'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.removeAttribute('readonly'), el.removeAttribute('disabled');
+                });
+
+                if (pwdGroup) pwdGroup.classList.remove('d-none');
+                if (roleGroup) roleGroup.classList.remove('d-none');
+                if (btnSubmit) {
+                    btnSubmit.classList.remove('d-none');
+                    btnSubmit.textContent = 'Lưu Thay Đổi';
+                }
+                if (btnDelete) {
+                    if (status === 'inactive') {
+                        btnDelete.href = `/admin/permanent-delete/${id}`;
+                        btnDelete.innerHTML = '<i class="bi bi-trash-fill me-1"></i>Xóa Vĩnh Viễn Khỏi CSDL';
+                        btnDelete.className = 'btn btn-outline-danger fw-bold';
+                        btnDelete.onclick = () => confirm('CẢNH BÁO: Bạn có chắc chắn muốn xóa vĩnh viễn nhân sự này khỏi cơ sở dữ liệu không?');
+                    } else {
+                        btnDelete.href = `/admin/delete/${id}`;
+                        btnDelete.innerHTML = '<i class="bi bi-person-x-fill me-1"></i>Cho Nghỉ Việc / Ẩn';
+                        btnDelete.className = 'btn btn-outline-danger fw-bold';
+                        btnDelete.onclick = () => confirm('Bạn có chắc chắn muốn chuyển nhân sự này sang danh sách Đã nghỉ việc / Đã ẩn không?');
+                    }
+                    btnDelete.classList.remove('d-none');
+                }
+            } else {
+                // USER THƯỜNG
+                if (isSelf) {
+                    // USER TỰ SỬA THÔNG TIN CÁ NHÂN CỦA MÌNH
+                    document.getElementById('profileModalLabel').textContent = 'Hồ Sơ Của Tôi - Chỉnh Sửa Thông Tin Cá Nhân';
+                    document.getElementById('profileModalSubtitle').textContent = 'Bạn có thể tự cập nhật họ tên, liên hệ và mật khẩu';
+                    readOnlyNotice.classList.add('d-none');
+                    selfEditNotice.classList.remove('d-none');
+
+                    // Các trường cá nhân được sửa
+                    ['mName', 'mEmail', 'mPhone', 'mEmergency', 'mPwd'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.removeAttribute('readonly'), el.removeAttribute('disabled');
+                    });
+
+                    // Các trường hệ thống bị khóa
+                    ['mCode', 'mDept', 'mPos', 'mRole', 'mStartDate'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.setAttribute('disabled', 'disabled');
+                    });
+
+                    if (pwdGroup) pwdGroup.classList.remove('d-none');
+                    if (roleGroup) roleGroup.classList.add('d-none');
+                    if (btnSubmit) {
+                        btnSubmit.classList.remove('d-none');
+                        btnSubmit.textContent = 'Cập Nhật Thông Tin Của Tôi';
+                    }
+                    if (btnDelete) btnDelete.classList.add('d-none');
+                } else {
+                    // USER XEM ĐỒNG NGHIỆP: CHẾ ĐỘ CHỈ ĐỌC (READ-ONLY)
+                    document.getElementById('profileModalLabel').textContent = `Hồ Sơ Đồng Nghiệp: ${name}`;
+                    document.getElementById('profileModalSubtitle').textContent = `Mã: ${code} - Chế độ xem`;
+                    readOnlyNotice.classList.remove('d-none');
+                    selfEditNotice.classList.add('d-none');
+
+                    // Khóa tất cả các trường
+                    ['mCode', 'mName', 'mEmail', 'mPhone', 'mEmergency', 'mStartDate', 'mPos', 'mDept', 'mRole'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.setAttribute('readonly', 'readonly'), el.setAttribute('disabled', 'disabled');
+                    });
+
+                    // Ẩn mật khẩu và vai trò
+                    if (pwdGroup) pwdGroup.classList.add('d-none');
+                    if (roleGroup) roleGroup.classList.add('d-none');
+
+                    // ẨN HOÀN TOÀN NÚT LƯU VÀ NÚT XÓA
+                    if (btnSubmit) btnSubmit.classList.add('d-none');
+                    if (btnDelete) btnDelete.classList.add('d-none');
+                }
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('profileModal'));
+            modal.show();
+        }
+    </script>
+</body>
+</html>
+    </script>
+</body>
+</html>

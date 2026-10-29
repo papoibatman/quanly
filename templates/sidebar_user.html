@@ -1,0 +1,253 @@
+<!-- SIDEBAR DÙNG CHUNG CHO USER (sidebar_user.html) -->
+<style>
+    .sidebar {
+        width: 270px;
+        background-color: #0b1329;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        padding: 24px 16px;
+    }
+
+    .brand-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+        padding-left: 8px;
+    }
+
+    .brand-icon {
+        width: 38px;
+        height: 38px;
+        background: linear-gradient(135deg, #2563eb, #38bdf8);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+
+    .brand-title {
+        font-weight: 800;
+        font-size: 1.15rem;
+        color: #ffffff;
+        margin-bottom: 2px;
+        line-height: 1.1;
+    }
+
+    .brand-subtitle {
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: #38bdf8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .dept-lock-card {
+        background: #111e38;
+        border: 1px solid #1e293b;
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin-bottom: 22px;
+    }
+
+    .dept-lock-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #64748b;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+
+    .menu-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        color: #64748b;
+        text-transform: uppercase;
+        padding: 0 12px;
+        margin-bottom: 12px;
+    }
+
+    .nav-link-custom {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 16px;
+        color: #94a3b8;
+        border-radius: 10px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        margin-bottom: 6px;
+    }
+
+    .nav-link-custom i {
+        font-size: 1.1rem;
+    }
+
+    .nav-link-custom:hover:not(.active) {
+        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-link-custom.active {
+        background: linear-gradient(135deg, #3b82f6, #4f46e5) !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4) !important;
+        font-weight: 700 !important;
+    }
+
+    .system-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 18px;
+    }
+
+    .system-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #64748b;
+        text-transform: uppercase;
+        padding-left: 6px;
+        margin-bottom: 10px;
+    }
+
+    .user-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+
+    .user-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 0.95rem;
+    }
+
+    .logout-btn {
+        background: rgba(239, 68, 68, 0.12);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 7px 12px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .logout-btn:hover {
+        background: #ef4444;
+        color: #ffffff;
+    }
+</style>
+
+<aside class="sidebar">
+    <div>
+        <!-- LOGO / BRAND -->
+        <div class="brand-box">
+            <div class="brand-icon">
+                <i class="bi bi-layers-fill"></i>
+            </div>
+            <div>
+                <div class="brand-title">WORKFLOW</div>
+                <div class="brand-subtitle">BÁO CÁO CÔNG VIỆC HÀNG NGÀY</div>
+            </div>
+        </div>
+
+        <!-- PHÒNG BAN CỦA BẠN (CỐ ĐỊNH THEO USER) -->
+        {% set user_dept = current_user.department if current_user else (user.department if user else (session.get('department') or 'TDH')) %}
+        <div class="dept-lock-card">
+            <div class="dept-lock-label">PHÒNG BAN CỦA BẠN</div>
+            <div class="d-flex align-items-center justify-content-between">
+                <span class="fw-bold text-white" style="font-size: 1rem; letter-spacing: 0.5px;">{{ user_dept }}</span>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1" style="font-size: 0.68rem; font-weight: 700;">
+                    <i class="bi bi-shield-lock-fill me-1"></i>Phòng của bạn
+                </span>
+            </div>
+        </div>
+
+        <!-- MENU CHÍNH CHO USER -->
+        <div class="menu-label">MENU CHÍNH</div>
+        <nav class="nav flex-column">
+            <!-- 1. QUẢN LÝ DỰ ÁN -->
+            {% set is_projects_active = (active_page == 'projects' or request.endpoint in ['admin_dashboard', 'admin_reports'] or request.path in ['/admin', '/projects', '/admin/reports']) %}
+            <a href="{{ url_for('admin_dashboard') }}" class="nav-link-custom {{ 'active' if is_projects_active else '' }}">
+                <i class="bi bi-grid-fill"></i>
+                <span>Quản lý dự án</span>
+            </a>
+
+            <!-- 2. CÔNG VIỆC CỦA TÔI -->
+            {% set is_tasks_active = (active_page == 'user_tasks' or request.endpoint == 'user_tasks' or request.path == '/user/tasks') %}
+            <a href="{{ url_for('user_tasks') }}" class="nav-link-custom {{ 'active' if is_tasks_active else '' }}">
+                <i class="bi bi-check2-square"></i>
+                <span>Công việc của tôi</span>
+            </a>
+
+            <!-- 3. QUẢN LÝ NHÂN SỰ -->
+            {% set is_employees_active = (active_page == 'employees' or request.endpoint == 'admin_employees' or request.path.startswith('/admin/employees')) %}
+            <a href="{{ url_for('admin_employees') }}" class="nav-link-custom {{ 'active' if is_employees_active else '' }}">
+                <i class="bi bi-people-fill"></i>
+                <span>Quản lý nhân sự</span>
+            </a>
+
+            <!-- 4. ĐĂNG KÝ LỊCH NGHỈ PHÉP -->
+            {% set is_leave_active = (active_page == 'leave_calendar' or request.endpoint == 'leave_calendar' or request.path.startswith('/leave-calendar')) %}
+            <a href="{{ url_for('leave_calendar') }}" class="nav-link-custom {{ 'active' if is_leave_active else '' }}">
+                <i class="bi bi-calendar-event"></i>
+                <span>Đăng ký lịch nghỉ phép</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- HỆ THỐNG / PROFILE FOOTER -->
+    {% set u_full_name = current_user.full_name if current_user else (user.full_name if user else (session.get('full_name') or 'Nhân Viên')) %}
+    {% set u_code = current_user.employee_code if current_user else (user.employee_code if user else (session.get('employee_code') or 'NV01')) %}
+    {% set u_initials = user_initials or (admin_initials or (initials or (u_full_name[:2]|upper))) %}
+
+    <div class="system-footer">
+        <div class="system-label">HỆ THỐNG</div>
+        <div class="user-card d-flex align-items-center gap-3">
+            <div class="user-avatar">
+                {{ u_initials }}
+            </div>
+            <div class="overflow-hidden">
+                <div class="text-white fw-bold text-truncate" style="font-size: 0.88rem;">{{ u_full_name }}</div>
+                <div class="text-muted text-truncate" style="font-size: 0.75rem;">
+                    <span class="badge bg-secondary" style="font-size: 0.68rem;">Nhân viên</span>
+                    <span class="ms-1 text-white-50">({{ u_code }})</span>
+                </div>
+            </div>
+        </div>
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Đăng xuất</span>
+        </a>
+    </div>
+</aside>
